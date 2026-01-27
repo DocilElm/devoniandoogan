@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.github.synnerz.devoniandoogan.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "DevonianMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+	}
+}
