@@ -29,6 +29,6 @@
 		"java": ">=21",
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*",
-		"devonian": ">=1.13.8-1.21.10"
+		"devonian": ">=1.15.8-1.21.10"
 	}
 }

@@ -1,7 +1,7 @@
 plugins {
 	id 'fabric-loom' version "${loom_version}"
 	id 'maven-publish'
-	id "org.jetbrains.kotlin.jvm" version "2.3.0"
+	id "org.jetbrains.kotlin.jvm" version "2.1.21"
 }
 
 version = project.mod_version
@@ -25,7 +25,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-	modApi("maven.modrinth:devonian:1.13.8-1.21.10")
+	modApi("maven.modrinth:devonian:1.15.8-1.21.10")
 }
 
 processResources {
