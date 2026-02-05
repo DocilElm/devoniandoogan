@@ -5,11 +5,22 @@ import com.github.synnerz.devonian.config.Categories
 import com.github.synnerz.devonian.features.Feature
 import com.github.synnerz.devonian.features.dungeons.clear.BoxStarMob
 import com.github.synnerz.devonian.features.dungeons.map.DungeonMap
+import com.github.synnerz.devoniandoogan.features.AutoSell
 import net.fabricmc.api.ClientModInitializer
+import net.minecraft.client.KeyMapping
+import net.minecraft.resources.ResourceLocation
 import org.slf4j.LoggerFactory
 
 object DevonianDoogan : ClientModInitializer {
     private val logger = LoggerFactory.getLogger("devoniandoogan")
+	val keybindCategory by lazy {
+		KeyMapping.Category.register(
+			ResourceLocation.fromNamespaceAndPath(
+				"devoniandoogan",
+				"keybinds"
+			)
+		)
+	}
 
 	override fun onInitializeClient() {
 		logger.warn("Initialized Synnerz/DevonianDoogan")
@@ -21,13 +32,18 @@ object DevonianDoogan : ClientModInitializer {
 			"",
 			Categories.DUNGEON_MAP,
 			"catacombs",
-			displayName = "§cRender Hidden Rooms",
+			displayName = "Render Hidden Rooms",
 			subcategory = "Behavior",
 			cheeto = true,
 		) {
-			override fun setRegistered(b: Boolean) = apply {
-				super.setRegistered(b)
-				DungeonMap.SETTING_RENDER_HIDDEN_ROOMS = b
+			override fun add() {
+				super.add()
+				DungeonMap.SETTING_RENDER_HIDDEN_ROOMS = true
+			}
+
+			override fun remove() {
+				super.remove()
+				DungeonMap.SETTING_RENDER_HIDDEN_ROOMS = false
 			}
 		})
 
@@ -35,14 +51,21 @@ object DevonianDoogan : ClientModInitializer {
 			"doogan\$renderStarEsp",
 			"",
 			Categories.DUNGEONS,
-			displayName = "§cStarred Mobs Esp",
+			displayName = "Starred Mobs Esp",
 			subcategory = "Highlights",
 			cheeto = true,
 		) {
-			override fun setRegistered(b: Boolean) = apply {
-				super.setRegistered(b)
-				BoxStarMob.SETTING_PHASE = b
+			override fun add() {
+				super.add()
+				BoxStarMob.SETTING_PHASE = true
+			}
+
+			override fun remove() {
+				super.remove()
+				BoxStarMob.SETTING_PHASE = false
 			}
 		})
+
+		Devonian.addFeatureInstance(AutoSell)
 	}
 }
