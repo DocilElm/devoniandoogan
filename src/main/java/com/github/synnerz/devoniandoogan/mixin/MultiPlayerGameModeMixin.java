@@ -1,6 +1,7 @@
 package com.github.synnerz.devoniandoogan.mixin;
 
 import com.github.synnerz.devoniandoogan.features.AvoidBreakingSecrets;
+import com.github.synnerz.devoniandoogan.features.ZeroPingDB;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
@@ -25,6 +26,7 @@ public class MultiPlayerGameModeMixin {
             locals = LocalCapture.CAPTURE_FAILSOFT
     )
     private void devonianDoogan$onPreBlockDestroy(BlockPos blockPos, CallbackInfoReturnable<Boolean> cir, Level level, BlockState blockState, Block block) {
+        ZeroPingDB.INSTANCE.onBreak(blockPos, block);
         AvoidBreakingSecrets.INSTANCE.setShouldAvoid(AvoidBreakingSecrets.INSTANCE.avoid(blockPos, blockState, block));
     }
 
