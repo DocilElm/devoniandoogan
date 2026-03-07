@@ -9,6 +9,7 @@ import com.github.synnerz.devoniandoogan.features.AutoCloseChest
 import com.github.synnerz.devoniandoogan.features.AutoCombine
 import com.github.synnerz.devoniandoogan.features.AutoRefill
 import com.github.synnerz.devoniandoogan.features.AutoSell
+import com.github.synnerz.devoniandoogan.features.AvoidBreakingSecrets
 import net.fabricmc.api.ClientModInitializer
 import net.minecraft.client.KeyMapping
 import net.minecraft.resources.ResourceLocation
@@ -73,5 +74,6 @@ object DevonianDoogan : ClientModInitializer {
 		Devonian.addFeatureInstance(AutoCombine)
 		Devonian.addFeatureInstance(AutoRefill)
 		Devonian.addFeatureInstance(AutoCloseChest)
+		Devonian.addFeatureInstance(AvoidBreakingSecrets)
 	}
 }
