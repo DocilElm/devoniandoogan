@@ -13,7 +13,8 @@ object AutoRefill : Feature(
     "Refills your pearl/leaps/superbooms/decoy/jerry",
     Categories.DUNGEONS,
     "catacombs",
-    subcategory = "QOL"
+    subcategory = "QOL",
+    cheeto = true
 ) {
     private val SETTING_ON_MORT_ONLY = addSwitch(
         "onMortOnly",
