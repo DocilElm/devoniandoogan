@@ -5,6 +5,7 @@ import com.github.synnerz.devonian.config.Categories
 import com.github.synnerz.devonian.features.Feature
 import com.github.synnerz.devonian.features.dungeons.clear.BoxStarMob
 import com.github.synnerz.devonian.features.dungeons.map.DungeonMap
+import com.github.synnerz.devoniandoogan.features.AutoCombine
 import com.github.synnerz.devoniandoogan.features.AutoSell
 import net.fabricmc.api.ClientModInitializer
 import net.minecraft.client.KeyMapping
@@ -67,5 +68,6 @@ object DevonianDoogan : ClientModInitializer {
 		})
 
 		Devonian.addFeatureInstance(AutoSell)
+		Devonian.addFeatureInstance(AutoCombine)
 	}
 }
