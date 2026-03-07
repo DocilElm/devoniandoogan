@@ -9,6 +9,7 @@ Have [Devonian](https://modrinth.com/mod/devonian) mod installed
 * ESP (see through walls) BoxStarMobs
 * AutoSell (set keybinds in mc controls)
 * AutoCombine (currently only auto combines: legion, ult wise, wisdom, last stand, swarm, soul eater, overload, rejuvenate, dragon hunter, smoldering, green thumb)
+* AutoRefill
 
 ## How to access the settings?
 This mod injects itself into [Devonian](https://modrinth.com/mod/devonian) so its settings are inside of `/dv` marked as "cheats" (in red)
