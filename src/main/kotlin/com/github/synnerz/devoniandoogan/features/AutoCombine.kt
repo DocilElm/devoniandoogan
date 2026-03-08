@@ -81,12 +81,43 @@ object AutoCombine : Feature(
                 }
                 if (enchants.size > 1) return@forEach
                 val ( k, v ) = enchants.entries.first()
-                if (k !in books) return@forEach
+                val max = books[k] ?: return@forEach
+                if (v == max) return@forEach
 
                 data.add(BookSlot(idx, k, v, itemStack))
             }
 
             Scheduler.scheduleTask {
+                data.forEach { sortedData.getOrPut("${it.enchantName}:${it.level}") { mutableListOf() }.add(it) }
+                sortedData.entries.reversed().forEach { (k, v) -> if (v.size < 2) sortedData.remove(k) }
+                lastClick = System.currentTimeMillis()
+            }
+        }
+
+        on<ServerContainerSetSlotEvent> { event ->
+            if (currentEnchant == null) return@on
+            val idx = event.slot
+            if (idx < 54) return@on
+            val itemStack = event.itemStack
+            if (itemStack.item != Items.ENCHANTED_BOOK) return@on
+            val extraAttributes = ItemUtils.extraAttributes(itemStack) ?: return@on
+            val enchs = extraAttributes.getCompound("enchantments")
+            if (!enchs.isPresent || enchs.isEmpty) return@on
+            val enchants = mutableMapOf<String, Int>()
+
+            enchs.get().forEach { k, v ->
+                val level = v.asInt().getOrNull() ?: return@forEach
+                enchants[k] = level
+            }
+            if (enchants.size > 1) return@on
+            val ( k, v ) = enchants.entries.first()
+            val max = books[k] ?: return@on
+            if (v == max) return@on
+
+            Scheduler.scheduleTask {
+                data.removeIf { it.slot == idx }
+                data.add(BookSlot(idx, k, v, itemStack))
+                sortedData.clear()
                 data.forEach { sortedData.getOrPut("${it.enchantName}:${it.level}") { mutableListOf() }.add(it) }
                 sortedData.entries.reversed().forEach { (k, v) -> if (v.size < 2) sortedData.remove(k) }
                 lastClick = System.currentTimeMillis()
