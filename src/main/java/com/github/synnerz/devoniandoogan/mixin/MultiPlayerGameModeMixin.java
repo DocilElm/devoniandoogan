@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,7 +27,6 @@ public class MultiPlayerGameModeMixin {
             locals = LocalCapture.CAPTURE_FAILSOFT
     )
     private void devonianDoogan$onPreBlockDestroy(BlockPos blockPos, CallbackInfoReturnable<Boolean> cir, Level level, BlockState blockState, Block block) {
-        ZeroPingDB.INSTANCE.onBreak(blockPos, block);
         AvoidBreakingSecrets.INSTANCE.setShouldAvoid(AvoidBreakingSecrets.INSTANCE.avoid(blockPos, blockState, block));
     }
 
@@ -40,5 +40,17 @@ public class MultiPlayerGameModeMixin {
     private boolean devonianDoogan$onBlockDestroy(Level instance, BlockPos blockPos, BlockState blockState, int i, Operation<Boolean> original) {
         if (AvoidBreakingSecrets.INSTANCE.getShouldAvoid()) return false;
         return original.call(instance, blockPos, blockState, i);
+    }
+
+    @Inject(
+            method = "startDestroyBlock",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/tutorial/Tutorial;onDestroyBlock(Lnet/minecraft/client/multiplayer/ClientLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;F)V"
+            ),
+            locals = LocalCapture.CAPTURE_FAILSOFT
+    )
+    private void devonianDoogan$onBlockStartBreak(BlockPos blockPos, Direction direction, CallbackInfoReturnable<Boolean> cir, BlockState blockState) {
+        ZeroPingDB.INSTANCE.onBreak(blockPos, blockState.getBlock());
     }
 }
