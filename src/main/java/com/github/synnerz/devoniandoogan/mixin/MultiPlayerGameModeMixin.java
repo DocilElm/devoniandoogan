@@ -51,6 +51,6 @@ public class MultiPlayerGameModeMixin {
             locals = LocalCapture.CAPTURE_FAILSOFT
     )
     private void devonianDoogan$onBlockStartBreak(BlockPos blockPos, Direction direction, CallbackInfoReturnable<Boolean> cir, BlockState blockState) {
-        ZeroPingDB.INSTANCE.onBreak(blockPos, blockState.getBlock());
+        ZeroPingDB.INSTANCE.onBreak(blockPos, blockState, blockState.getBlock());
     }
 }
