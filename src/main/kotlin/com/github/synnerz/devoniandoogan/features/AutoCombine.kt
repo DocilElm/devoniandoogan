@@ -2,14 +2,14 @@ package com.github.synnerz.devoniandoogan.features
 
 import com.github.synnerz.devonian.api.ChatUtils
 import com.github.synnerz.devonian.api.ItemUtils
-import com.github.synnerz.devonian.api.Scheduler
 import com.github.synnerz.devonian.api.ScreenUtils
 import com.github.synnerz.devonian.api.events.*
 import com.github.synnerz.devonian.features.Feature
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.core.component.DataComponents
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.jvm.optionals.getOrNull
 
 object AutoCombine : Feature(
@@ -38,14 +38,14 @@ object AutoCombine : Feature(
         "smoldering" to 5,
         "green_thumb" to 5
     )
-    private val data = mutableListOf<BookSlot>()
-    private val sortedData = mutableMapOf<String, MutableList<BookSlot>>()
+    private val data = CopyOnWriteArrayList<BookSlot>()
+    private val sortedData = ConcurrentHashMap<String, MutableList<BookSlot>>()
     private var inAnvil = false
     private var currentEnchant: String? = null
     private var lastClick = -1L
-    private var wasUsed = false
+    private val stash = mutableListOf<String>()
 
-    data class BookSlot(val slot: Int, val enchantName: String, val level: Int, val itemStack: ItemStack)
+    data class BookSlot(val slot: Int, val enchantName: String, val level: Int, val uuid: String)
 
     override fun initialize() {
         on<ServerContainerOpenEvent> { event ->
@@ -53,20 +53,13 @@ object AutoCombine : Feature(
             if (!inAnvil) reset()
         }
 
-        on<ServerContainerCloseEvent> {
-            reset()
-            wasUsed = false
-        }
-
-        on<ClientContainerCloseEvent> {
-            reset()
-            wasUsed = false
-        }
+        on<ServerContainerCloseEvent> { reset() }
+        on<ClientContainerCloseEvent> { reset() }
 
         on<ServerContainerSetContentEvent> { event ->
             if (!inAnvil) return@on
 
-            reset()
+            reset(false)
             event.forEach { idx, itemStack ->
                 if (idx < 54) return@forEach
                 if (itemStack == null || itemStack.item != Items.ENCHANTED_BOOK) return@forEach
@@ -83,19 +76,18 @@ object AutoCombine : Feature(
                 val ( k, v ) = enchants.entries.first()
                 val max = books[k] ?: return@forEach
                 if (v == max) return@forEach
+                val uuid = ItemUtils.extraAttributes(itemStack)?.get("uuid")?.asString()?.getOrNull() ?: return@forEach
 
-                data.add(BookSlot(idx, k, v, itemStack))
+                data.add(BookSlot(idx, k, v, uuid))
             }
 
-            Scheduler.scheduleTask {
-                data.forEach { sortedData.getOrPut("${it.enchantName}:${it.level}") { mutableListOf() }.add(it) }
-                sortedData.entries.reversed().forEach { (k, v) -> if (v.size < 2) sortedData.remove(k) }
-                lastClick = System.currentTimeMillis()
-            }
+            data.forEach { sortedData.getOrPut("${it.enchantName}:${it.level}") { mutableListOf() }.add(it) }
+            sortedData.entries.forEach { (k, v) -> if (v.size < 2) sortedData.remove(k) }
+            lastClick = System.currentTimeMillis()
         }
 
         on<ServerContainerSetSlotEvent> { event ->
-            if (currentEnchant == null) return@on
+            if (currentEnchant == null || !inAnvil) return@on
             val idx = event.slot
             if (idx < 54) return@on
             val itemStack = event.itemStack
@@ -113,15 +105,14 @@ object AutoCombine : Feature(
             val ( k, v ) = enchants.entries.first()
             val max = books[k] ?: return@on
             if (v == max) return@on
+            val uuid = ItemUtils.extraAttributes(itemStack)?.get("uuid")?.asString()?.getOrNull() ?: return@on
 
-            Scheduler.scheduleTask {
-                data.removeIf { it.slot == idx }
-                data.add(BookSlot(idx, k, v, itemStack))
-                sortedData.clear()
-                data.forEach { sortedData.getOrPut("${it.enchantName}:${it.level}") { mutableListOf() }.add(it) }
-                sortedData.entries.reversed().forEach { (k, v) -> if (v.size < 2) sortedData.remove(k) }
-                lastClick = System.currentTimeMillis()
-            }
+            data.removeIf { it.slot == idx }
+            data.add(BookSlot(idx, k, v, uuid))
+            sortedData.clear()
+            data.forEach { sortedData.getOrPut("${it.enchantName}:${it.level}") { mutableListOf() }.add(it) }
+            sortedData.entries.forEach { (k, v) -> if (v.size < 2) sortedData.remove(k) }
+            lastClick = System.currentTimeMillis()
         }
 
         on<TickEvent> {
@@ -138,21 +129,35 @@ object AutoCombine : Feature(
             if (midItem.item == Items.BARRIER) {
                 ChatUtils.sendMessage("&c[&4Doogan&c] &cSeems like the Auto Combine did not get correct books, try re-opening the anvil menu")
                 reset()
-                wasUsed = false
                 return@on
             }
             if (isEnchanted == true || isSign) {
-                if (!wasUsed) return@on
+                if (stash.size != 2) return@on
+                val uuid1 =
+                    if (isSign) stash.first()
+                    else items.getOrNull(29)?.let { ItemUtils.extraAttributes(it)?.get("uuid")?.asString()?.getOrNull() } ?: return@on
+                val uuid2 =
+                    if (isSign) stash[1]
+                    else items.getOrNull(33)?.let { ItemUtils.extraAttributes(it)?.get("uuid")?.asString()?.getOrNull() } ?: return@on
+                if (!stash.contains(uuid1) || !stash.contains(uuid2)) {
+                    reset()
+                    return@on
+                }
                 lastClick = System.currentTimeMillis()
                 ScreenUtils.click(22, false)
-                if (isSign) wasUsed = false
+                if (isSign) stash.clear()
                 return@on
             }
-            if (data.isEmpty()) return@on
-            if (currentEnchant != null && currentEnchant !in sortedData)
-                currentEnchant = null
+            if (data.isEmpty() || stash.size == 2) return@on
+            if (currentEnchant != null && !sortedData.containsKey(currentEnchant)) {
+                if (stash.isEmpty()) currentEnchant = null
+                else {
+                    println("DevonianDoogna something broke?")
+                    return@on
+                }
+            }
 
-            sortedData.forEach { (k, v) ->
+            sortedData.forEach sort@{ (k, v) ->
                 if (currentEnchant == null) currentEnchant = k
 
                 v.reversed().forEach {
@@ -164,13 +169,12 @@ object AutoCombine : Feature(
                     val enchantName = it.enchantName
                     val level = it.level
                     if (currentEnchant != "$enchantName:$level") return@forEach
-                    if (!canClick()) return@forEach
+                    if (!canClick() || stash.size == 2) return@forEach
 
                     lastClick = System.currentTimeMillis()
                     ScreenUtils.click(it.slot, true)
-                    wasUsed = true
+                    if (!stash.contains(it.uuid)) stash.add(it.uuid)
                     v.remove(it)
-                    if (v.isEmpty()) currentEnchant = null
                 }
             }
         }
@@ -179,9 +183,10 @@ object AutoCombine : Feature(
     private fun canClick(): Boolean =
         lastClick == -1L || System.currentTimeMillis() - lastClick > SETTING_DELAY.get()
 
-    private fun reset() {
+    private fun reset(full: Boolean = true) {
         data.clear()
         sortedData.clear()
+        if (full) stash.clear()
         currentEnchant = null
     }
 }
