@@ -25,6 +25,12 @@ object AutoCombine : Feature(
         "The delay for each click (too low might ban)",
         "AutoCombine Delay"
     )
+    private val SETTING_FORCE_ONLY = addSwitch(
+        "forceAcceptOnly",
+        false,
+        "Forces the auto combiner to only click on anvil/sign instead of doing it entirely",
+        "Force Click Only"
+    )
     private val books = mapOf(
         "ultimate_legion" to 5,
         "ultimate_wise" to 5,
@@ -129,6 +135,14 @@ object AutoCombine : Feature(
             if (midItem.item == Items.BARRIER) {
                 ChatUtils.sendMessage("&c[&4Doogan&c] &cSeems like the Auto Combine did not get correct books, try re-opening the anvil menu")
                 reset()
+                return@on
+            }
+            if (SETTING_FORCE_ONLY.get()) {
+                if (!canClick()) return@on
+                if (isEnchanted == true || isSign) {
+                    lastClick = System.currentTimeMillis()
+                    ScreenUtils.click(22, false)
+                }
                 return@on
             }
             if (isEnchanted == true || isSign) {
