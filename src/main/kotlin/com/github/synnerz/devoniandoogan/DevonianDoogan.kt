@@ -28,7 +28,7 @@ object DevonianDoogan : ClientModInitializer {
 	}
 
 	override fun onInitializeClient() {
-		logger.warn("Initialized Synnerz/DevonianDoogan")
+		logger.warn("Initialized DocilElm/DevonianDoogan")
 	}
 
 	fun preInit() {

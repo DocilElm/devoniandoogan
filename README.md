@@ -18,3 +18,6 @@ Have [Devonian](https://modrinth.com/mod/devonian) mod installed
 This mod injects itself into [Devonian](https://modrinth.com/mod/devonian) so its settings are inside of `/dv` marked as "cheats" (in red)
 
 ## THIS MOD IS NOT RESPONSIBLE FOR ANY BANS, YOU CHOSE TO USE IT.
+
+# License
+This project is licensed under ARR License, and it is source available not open source.
