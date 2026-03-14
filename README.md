@@ -14,6 +14,7 @@ Have [Devonian](https://modrinth.com/mod/devonian) mod installed
 * AvoidBreakingSecrets
 * ZeroPingDB
 * TrevorESP (also warps you to locations)
+* NoRotate
 
 ## How to access the settings?
 This mod injects itself into [Devonian](https://modrinth.com/mod/devonian) so its settings are inside of `/dv` marked as "cheats" (in red)

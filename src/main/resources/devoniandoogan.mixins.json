@@ -12,6 +12,8 @@
     "requireAnnotations": true
   },
   "client": [
-    "MultiPlayerGameModeMixin"
+    "ClientPacketListenerMixin",
+    "MultiPlayerGameModeMixin",
+    "accessor.LocalPlayerAccessor"
   ]
 }

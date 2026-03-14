@@ -10,6 +10,7 @@ import com.github.synnerz.devoniandoogan.features.AutoCombine
 import com.github.synnerz.devoniandoogan.features.AutoRefill
 import com.github.synnerz.devoniandoogan.features.AutoSell
 import com.github.synnerz.devoniandoogan.features.AvoidBreakingSecrets
+import com.github.synnerz.devoniandoogan.features.NoRotate
 import com.github.synnerz.devoniandoogan.features.TrevorESP
 import com.github.synnerz.devoniandoogan.features.ZeroPingDB
 import net.fabricmc.api.ClientModInitializer
@@ -79,5 +80,6 @@ object DevonianDoogan : ClientModInitializer {
 		Devonian.addFeatureInstance(AvoidBreakingSecrets)
 		Devonian.addFeatureInstance(ZeroPingDB)
 		Devonian.addFeatureInstance(TrevorESP)
+		Devonian.addFeatureInstance(NoRotate)
 	}
 }
