@@ -67,8 +67,7 @@ object NoRotate : Feature(
     fun canNoRotate(): Boolean {
         if (!isEnabled() || !shouldAllow()) return false
 
-        return checkItem(minecraft.player!!.mainHandItem)
-                && System.currentTimeMillis() - lastClick < SETTING_ROTATION_TIME.get()
+        return System.currentTimeMillis() - lastClick < SETTING_ROTATION_TIME.get()
     }
 
     override fun onWorldChange(event: WorldChangeEvent) {
