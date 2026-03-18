@@ -15,6 +15,7 @@ Have [Devonian](https://modrinth.com/mod/devonian) mod installed
 * ZeroPingDB
 * TrevorESP (also warps you to locations)
 * NoRotate
+* AutoCroesus command is `/dv acc` types are `"copylog"`, `"reset"` and `"go"` to start (does not support kismet, blacklist, whitelist yet also only works with 1.21.11 `devonian`)
 
 ## How to access the settings?
 This mod injects itself into [Devonian](https://modrinth.com/mod/devonian) so its settings are inside of `/dv` marked as "cheats" (in red)

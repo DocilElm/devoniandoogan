@@ -25,7 +25,9 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-	modApi("maven.modrinth:devonian:1.18.8-1.21.10")
+//	modApi("maven.modrinth:devonian:1.18.8-1.21.10")
+	// TODO: remove once modrinth is updated
+	modApi(files("libs/devonian-1.18.8.jar"))
 }
 
 processResources {

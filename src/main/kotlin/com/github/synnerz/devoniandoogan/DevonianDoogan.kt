@@ -7,6 +7,7 @@ import com.github.synnerz.devonian.features.dungeons.clear.BoxStarMob
 import com.github.synnerz.devonian.features.dungeons.map.DungeonMap
 import com.github.synnerz.devoniandoogan.features.AutoCloseChest
 import com.github.synnerz.devoniandoogan.features.AutoCombine
+import com.github.synnerz.devoniandoogan.features.AutoCroesus
 import com.github.synnerz.devoniandoogan.features.AutoRefill
 import com.github.synnerz.devoniandoogan.features.AutoSell
 import com.github.synnerz.devoniandoogan.features.AvoidBreakingSecrets
@@ -81,5 +82,6 @@ object DevonianDoogan : ClientModInitializer {
 		Devonian.addFeatureInstance(ZeroPingDB)
 		Devonian.addFeatureInstance(TrevorESP)
 		Devonian.addFeatureInstance(NoRotate)
+		Devonian.addFeatureInstance(AutoCroesus)
 	}
 }
