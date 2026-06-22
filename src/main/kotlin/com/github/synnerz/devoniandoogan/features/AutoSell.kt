@@ -10,7 +10,7 @@ import com.github.synnerz.devonian.features.Feature
 import com.github.synnerz.devonian.utils.PersistentJsonClass
 import com.github.synnerz.devoniandoogan.DevonianDoogan
 import com.google.gson.reflect.TypeToken
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.world.item.ItemStack
@@ -31,14 +31,14 @@ object AutoSell : Feature(
         "The delay for each click (too low might ban)",
         "Auto Sell Delay"
     )
-    private val sellByName = KeyBindingHelper.registerKeyBinding(
+    private val sellByName = KeyMappingHelper.registerKeyMapping(
         KeyMapping(
             "key.devoniandoogan.sellname",
             GLFW.GLFW_KEY_UNKNOWN,
             DevonianDoogan.keybindCategory
         )
     )
-    private val sellById = KeyBindingHelper.registerKeyBinding(
+    private val sellById = KeyMappingHelper.registerKeyMapping(
         KeyMapping(
             "key.devoniandoogan.sellid",
             GLFW.GLFW_KEY_UNKNOWN,

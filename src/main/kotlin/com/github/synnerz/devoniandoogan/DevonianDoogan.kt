@@ -17,14 +17,14 @@ import com.github.synnerz.devoniandoogan.features.TrevorESP
 import com.github.synnerz.devoniandoogan.features.ZeroPingDB
 import net.fabricmc.api.ClientModInitializer
 import net.minecraft.client.KeyMapping
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import org.slf4j.LoggerFactory
 
 object DevonianDoogan : ClientModInitializer {
     private val logger = LoggerFactory.getLogger("devoniandoogan")
 	val keybindCategory by lazy {
 		KeyMapping.Category.register(
-			ResourceLocation.fromNamespaceAndPath(
+			Identifier.fromNamespaceAndPath(
 				"devoniandoogan",
 				"keybinds"
 			)

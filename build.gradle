@@ -1,7 +1,7 @@
 plugins {
-	id 'fabric-loom' version "${loom_version}"
+	id "net.fabricmc.fabric-loom" version "${loom_version}"
 	id 'maven-publish'
-	id "org.jetbrains.kotlin.jvm" version "2.1.21"
+	id "org.jetbrains.kotlin.jvm" version "2.3.20"
 }
 
 version = project.mod_version
@@ -18,16 +18,13 @@ repositories {
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	implementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-//	modApi("maven.modrinth:devonian:1.18.8-1.21.10")
-	// TODO: remove once modrinth is updated
-	modApi(files("libs/devonian-1.23.9.jar"))
+	api("maven.modrinth:devonian:1.25.9-26.1")
 }
 
 processResources {
@@ -39,12 +36,12 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 25
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 	kotlinOptions {
-		jvmTarget = 21
+		jvmTarget = 25
 	}
 }
 
@@ -54,8 +51,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
 
 jar {

@@ -13,7 +13,7 @@ import com.github.synnerz.devonian.config.Categories
 import com.github.synnerz.devonian.features.Feature
 import com.github.synnerz.devonian.utils.StringUtils
 import com.github.synnerz.devoniandoogan.DevonianDoogan
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.protocol.game.ServerboundContainerClosePacket
@@ -71,7 +71,7 @@ object AutoCroesus : Feature(
         "Clicks the croesus entity if in front (and reach) of the player",
         "Click Entity"
     )
-    private val killSwitch = KeyBindingHelper.registerKeyBinding(
+    private val killSwitch = KeyMappingHelper.registerKeyMapping(
         KeyMapping(
             "key.devoniandoogan.croesusKillSwitch",
             GLFW.GLFW_KEY_LEFT_SHIFT,
@@ -474,11 +474,11 @@ object AutoCroesus : Feature(
             logger.add("connection was null")
             return false
         }
-        connection.send(ServerboundInteractPacket.createInteractionPacket(
-            entity,
-            player.isShiftKeyDown,
+        connection.send(ServerboundInteractPacket(
+            entity.id,
             InteractionHand.MAIN_HAND,
-            Vec3(0.0, 0.0, 0.0)
+            Vec3(0.0, 0.0, 0.0),
+            player.isShiftKeyDown,
         ))
         logger.add("left clicking croesus")
         return true
