@@ -460,13 +460,12 @@ object AutoCroesus : Feature(
             logger.add("entity uuid version was not 2 \"${entity.uuid.version()}\"")
             return false
         }
-        val displayEntity = world.getEntities(entity, entity.boundingBox.expandTowards(1.0, 1.0, 1.0))?.firstOrNull()
-        if (displayEntity == null || displayEntity.x - entity.x != 0.0 || displayEntity.y - entity.y != 0.0 || displayEntity.z - entity.z != 0.0) {
-            logger.add("croesus display name was not found properly")
-            return false
+        val displayEntity = world.getEntities(entity, entity.boundingBox.expandTowards(1.0, 1.0, 1.0)).find {
+            it.customName?.string?.lowercase() == "croesus"
         }
-        if (displayEntity.customName?.string != "Croesus") {
-            logger.add("display entity was not named croesus \"${displayEntity.customName?.string}\"")
+        if (displayEntity == null || displayEntity.x - entity.x != 0.0 || displayEntity.y - entity.y != 0.0 || displayEntity.z - entity.z != 0.0) {
+            logger.add("entities(${world.getEntities(entity, entity.boundingBox.expandTowards(1.0, 1.0, 1.0))} ||| $entity)")
+            logger.add("croesus display name was not found properly")
             return false
         }
         val connection = minecraft.connection
