@@ -96,7 +96,7 @@ object AutoSell : Feature(
         }
 
         on<TickEvent> {
-            val screen = minecraft.screen ?: return@on
+            val screen = minecraft.gui.screen() ?: return@on
             val container = screen as? AbstractContainerScreen<*> ?: return@on
             if (!validGuis.contains(container.title.string)) return@on
             val items = container.menu.items

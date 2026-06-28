@@ -8,7 +8,7 @@ import com.github.synnerz.devonian.features.Feature
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.entity.BlockEntityTypes
 import net.minecraft.world.level.block.entity.SkullBlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
@@ -28,7 +28,7 @@ object AvoidBreakingSecrets : Feature(
         if (ItemUtils.skyblockId(itemStack) != "DUNGEONBREAKER") return false
         if (block == Blocks.PLAYER_HEAD && blockState.hasBlockEntity()) {
             val entityBlock = minecraft.level?.getBlockEntity(blockPos) ?: return false
-            if (entityBlock.type != BlockEntityType.SKULL) return false
+            if (entityBlock.type != BlockEntityTypes.SKULL) return false
             val skullBlock = entityBlock as SkullBlockEntity
             val owner = skullBlock.ownerProfile ?: return false
             val id = owner.partialProfile().id ?: return false

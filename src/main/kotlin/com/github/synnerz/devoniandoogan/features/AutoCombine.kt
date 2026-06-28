@@ -179,7 +179,7 @@ object AutoCombine : Feature(
         currentEnchant = null
     }
 
-    private fun container() = minecraft.screen as? AbstractContainerScreen<*>
+    private fun container() = minecraft.gui.screen() as? AbstractContainerScreen<*>
 
     private fun invLoaded(container: AbstractContainerScreen<*>?): Boolean {
         val inv = container ?: container() ?: return false

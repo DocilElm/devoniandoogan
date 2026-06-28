@@ -239,10 +239,10 @@ object AutoCroesus : Feature(
         ChatUtils.sendMessage("&cAuto Croesus &aall chests looted")
         logger.add("All chests done")
         reset()
-        if (minecraft.screen != null) {
+        if (minecraft.gui.screen() != null) {
             val container = container() ?: return
             minecraft.connection?.send(ServerboundContainerClosePacket(container.menu.containerId))
-            minecraft.setScreen(null)
+            minecraft.gui.setScreen(null)
         }
     }
 
@@ -574,11 +574,11 @@ object AutoCroesus : Feature(
         return null to null
     }
 
-    private fun inCroesus(): Boolean = minecraft.screen?.title?.string == "Croesus"
+    private fun inCroesus(): Boolean = minecraft.gui.screen()?.title?.string == "Croesus"
 
-    private fun inRunChest(): Boolean = minecraft.screen?.title?.string?.matches(runChestRegex) ?: false
+    private fun inRunChest(): Boolean = minecraft.gui.screen()?.title?.string?.matches(runChestRegex) ?: false
 
-    private fun container() = minecraft.screen as? AbstractContainerScreen<*>
+    private fun container() = minecraft.gui.screen() as? AbstractContainerScreen<*>
 
     private fun invLoaded(container: AbstractContainerScreen<*>?): Boolean {
         val inv = container ?: container() ?: return false
