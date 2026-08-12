@@ -97,6 +97,7 @@ object AutoCroesus : Feature(
     private val enchantedBookRegex = "^Enchanted Book \\(([\\w ]+) ([IV]+)\\)$".toRegex()
     private val essenceRegex = "^(Wither|Undead) Essence x(\\d+)$".toRegex()
     private val costRegex = "^(\\d[\\d,]+) Coins$".toRegex()
+    private val croesusTitleRegex = "^(?:\\(\\d+/\\d+\\) )?Croesus$".toRegex()
     private val chestNames = setOf("Wood", "Gold", "Diamond", "Emerald", "Obsidian", "Bedrock")
     private val chestSlots = listOf(
         10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25,
@@ -574,7 +575,7 @@ object AutoCroesus : Feature(
         return null to null
     }
 
-    private fun inCroesus(): Boolean = minecraft.gui.screen()?.title?.string == "Croesus"
+    private fun inCroesus(): Boolean = minecraft.gui.screen()?.title?.string?.let { croesusTitleRegex.matches(it) } ?: false
 
     private fun inRunChest(): Boolean = minecraft.gui.screen()?.title?.string?.matches(runChestRegex) ?: false
 
