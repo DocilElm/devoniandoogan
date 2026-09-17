@@ -2,6 +2,7 @@ package com.github.synnerz.devoniandoogan.mixin;
 
 import com.github.synnerz.devonian.Devonian;
 import com.github.synnerz.devoniandoogan.features.NoRotate;
+import com.github.synnerz.devoniandoogan.features.ZeroPingDB;
 import com.github.synnerz.devoniandoogan.mixin.accessor.LocalPlayerAccessor;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -9,6 +10,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
+import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PositionMoveRotation;
@@ -120,5 +122,16 @@ public abstract class ClientPacketListenerMixin {
         pl.setLastYawClient(lastRotation.yRot());
         wasChanged = false;
         lastRotation = null;
+    }
+
+    @Inject(
+            method = "handleSetHeldSlot",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/player/Inventory;setSelectedSlot(I)V"
+            )
+    )
+    private void devonianDoogan$onSetSelectedSlot(ClientboundSetHeldSlotPacket packet, CallbackInfo ci) {
+        ZeroPingDB.INSTANCE.onHeldSlotChange(packet.slot());
     }
 }
