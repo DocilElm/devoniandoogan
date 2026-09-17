@@ -5,6 +5,7 @@ import com.github.synnerz.devonian.api.dungeon.DungeonScanner
 import com.github.synnerz.devonian.api.dungeon.Dungeons
 import com.github.synnerz.devonian.api.dungeon.mapEnums.RoomTypes
 import com.github.synnerz.devonian.api.events.UseItemEvent
+import com.github.synnerz.devonian.api.events.UseItemOnEvent
 import com.github.synnerz.devonian.api.events.WorldChangeEvent
 import com.github.synnerz.devonian.config.Categories
 import com.github.synnerz.devonian.features.Feature
@@ -43,6 +44,16 @@ object NoRotate : Feature(
 
     override fun initialize() {
         on<UseItemEvent> {
+            if (!shouldAllow()) {
+                lastClick = -1
+                return@on
+            }
+
+            if (!checkItem(minecraft.player!!.mainHandItem)) return@on
+            lastClick = System.currentTimeMillis()
+        }
+
+        on<UseItemOnEvent> {
             if (!shouldAllow()) {
                 lastClick = -1
                 return@on
