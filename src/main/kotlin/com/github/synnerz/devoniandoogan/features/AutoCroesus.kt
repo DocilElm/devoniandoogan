@@ -13,6 +13,7 @@ import com.github.synnerz.devonian.config.Categories
 import com.github.synnerz.devonian.features.Feature
 import com.github.synnerz.devonian.utils.StringUtils
 import com.github.synnerz.devoniandoogan.DevonianDoogan
+import com.mojang.blaze3d.platform.InputConstants
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -23,7 +24,6 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
-import org.lwjgl.glfw.GLFW
 import kotlin.collections.contains
 import kotlin.math.roundToInt
 
@@ -74,7 +74,7 @@ object AutoCroesus : Feature(
     private val killSwitch = KeyMappingHelper.registerKeyMapping(
         KeyMapping(
             "key.devoniandoogan.croesusKillSwitch",
-            GLFW.GLFW_KEY_LEFT_SHIFT,
+            InputConstants.KEY_LSHIFT,
             DevonianDoogan.keybindCategory
         )
     )

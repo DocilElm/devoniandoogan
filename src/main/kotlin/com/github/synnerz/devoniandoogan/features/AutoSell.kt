@@ -15,7 +15,7 @@ import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import org.lwjgl.glfw.GLFW
+import org.lwjgl.sdl.SDLKeycode
 import kotlin.jvm.optionals.getOrNull
 
 object AutoSell : Feature(
@@ -34,14 +34,14 @@ object AutoSell : Feature(
     private val sellByName = KeyMappingHelper.registerKeyMapping(
         KeyMapping(
             "key.devoniandoogan.sellname",
-            GLFW.GLFW_KEY_UNKNOWN,
+            SDLKeycode.SDLK_UNKNOWN,
             DevonianDoogan.keybindCategory
         )
     )
     private val sellById = KeyMappingHelper.registerKeyMapping(
         KeyMapping(
             "key.devoniandoogan.sellid",
-            GLFW.GLFW_KEY_UNKNOWN,
+            SDLKeycode.SDLK_UNKNOWN,
             DevonianDoogan.keybindCategory
         )
     )
