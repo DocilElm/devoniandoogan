@@ -34,9 +34,12 @@ object ZeroPingDB : Feature(
     )
     private var lastItemStack = atomic(ItemStack.EMPTY)
 
-    fun onBreak(blockPos: BlockPos, blockState: BlockState, block: Block): Boolean {
+    fun onBreak(blockPos: BlockPos, blockState: BlockState, block: Block, destroyingItem: ItemStack): Boolean {
         if (block in blacklist) return false
         if (!isEnabled() || Location.area != "catacombs" || Dungeons.inBoss.value) return false
+        val heldItem = minecraft.player?.mainHandItem ?: return false
+        // soft check
+        if (heldItem.item != lastItemStack.value.item) return false
         if (lastItemStack.value.item == Items.DIAMOND_PICKAXE && ItemUtils.skyblockId(lastItemStack.value) != "DUNGEONBREAKER") return true
         else if (ItemUtils.skyblockId(lastItemStack.value) != "DUNGEONBREAKER") return false
         val world = minecraft.level ?: return false
