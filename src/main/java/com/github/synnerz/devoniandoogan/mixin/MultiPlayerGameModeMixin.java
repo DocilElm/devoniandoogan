@@ -7,6 +7,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,6 +23,9 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public class MultiPlayerGameModeMixin {
     @Shadow
     private int carriedIndex;
+
+    @Shadow
+    private ItemStack destroyingItem;
 
     @Inject(
             method = "destroyBlock",
@@ -57,7 +61,7 @@ public class MultiPlayerGameModeMixin {
             locals = LocalCapture.CAPTURE_FAILSOFT
     )
     private void devonianDoogan$onBlockStartBreak(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir, BlockState blockState) {
-        if (ZeroPingDB.INSTANCE.onBreak(pos, blockState, blockState.getBlock()))
+        if (ZeroPingDB.INSTANCE.onBreak(pos, blockState, blockState.getBlock(), destroyingItem))
             cir.cancel();
     }
 
@@ -71,7 +75,7 @@ public class MultiPlayerGameModeMixin {
             locals = LocalCapture.CAPTURE_FAILSOFT
     )
     private void devonianDoogan$onBlockContinueBreak(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir, BlockState blockState) {
-        if (ZeroPingDB.INSTANCE.onBreak(pos, blockState, blockState.getBlock()))
+        if (ZeroPingDB.INSTANCE.onBreak(pos, blockState, blockState.getBlock(), destroyingItem))
             cir.cancel();
     }
 
