@@ -11,6 +11,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
 import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
+import net.minecraft.network.protocol.game.ServerboundAcceptTeleportationPacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PositionMoveRotation;
@@ -92,20 +93,22 @@ public abstract class ClientPacketListenerMixin {
             )
     )
     private void devonianDoogan$onSendRot(Connection instance, Packet<?> packet, Operation<Void> original) {
+        var _packet = (ServerboundAcceptTeleportationPacket) packet;
+        if (_packet == null) return;
+
         var player = Devonian.INSTANCE.getMinecraft().player;
         if (player == null || lastRotation == null || !NoRotate.INSTANCE.canNoRotate()) {
             original.call(instance, packet);
             return;
         }
 
-        original.call(instance, new ServerboundMovePlayerPacket.PosRot(
+        original.call(instance, new ServerboundAcceptTeleportationPacket(
+                _packet.id(),
                 player.getX(),
                 player.getY(),
                 player.getZ(),
                 lastRotation.yRot(),
-                lastRotation.xRot(),
-                false,
-                false
+                lastRotation.xRot()
         ));
         wasChanged = true;
     }
