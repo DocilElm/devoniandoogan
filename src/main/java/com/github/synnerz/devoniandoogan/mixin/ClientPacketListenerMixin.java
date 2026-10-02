@@ -88,8 +88,7 @@ public abstract class ClientPacketListenerMixin {
             method = "handleMovePlayer",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/network/Connection;send(Lnet/minecraft/network/protocol/Packet;)V",
-                    ordinal = 1
+                    target = "Lnet/minecraft/network/Connection;send(Lnet/minecraft/network/protocol/Packet;)V"
             )
     )
     private void devonianDoogan$onSendRot(Connection instance, Packet<?> packet, Operation<Void> original) {
